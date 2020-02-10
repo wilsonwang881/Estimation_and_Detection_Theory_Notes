@@ -9,6 +9,8 @@
 \usepackage{fancyhdr}
 
 \usepackage{amsmath}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
 
 \usepackage{amssymb}
 
@@ -78,6 +80,7 @@ Statistical inference.
 \subsection{Probability Laws:}
 
 \begin{enumerate}
+
     \item Non-negative
     
     \item Normalization: sum to 1
@@ -93,11 +96,13 @@ A sample space $\Omega$ contains the outcomes $\omega$, which are disjoint, mutu
 A collection of subsets of $S$ is called a sigma algebra $B$ if it satisfies the 3 properties:
 
 \begin{enumerate}
+
     \item $\phi \in B$
     
     \item If $A \in B$, then $A^C \in B$
     
     \item If $A_1, A_2... \in B$, then $\bigcup\limits_{i=1}^{\infty} \in B$ (closed under countable unions)
+    
 \end{enumerate}
 
 From Wikipedia: In mathematical analysis and in probability theory, a $\sigma$-algebra (also $\sigma$-field) on a set $X$ is a collection $\sum$ of subsets of $X$ that includes $X$ itself, is closed under complement, and is closed under countable unions.
@@ -113,11 +118,13 @@ From Wikipedia: In mathematical analysis and in probability theory, a $\sigma$-a
 \end{equation*}
 
 \begin{itemize}
+
     \item Restriction to the sample space
     
     \item $Pr(.|B)$: new probability laws, still need to satisfy the 3 axioms
     
     \item $Pr(B) = \sum Pr(B|A_i)Pr(A_i)$
+    
 \end{itemize}
 
 \subsection{Countable Additivity:}
@@ -137,11 +144,13 @@ Disjoint $A_1$, $A_2$, $A_3$...
 \subsection{Independence:}
 
 \begin{itemize}
+
     \item $Pr(A \cap B) = Pr(A) Pr(B)$
     
     \item $Pr(A|B) = \frac{Pr(A \cap B)}{Pr(B)} = \frac{Pr(A)Pr(B)}{Pr(B)} = Pr(A)$, if independent and $Pr(B) > 0$
     
     \item $Pr(B|A) = Pr(B)$ if independent and $Pr(A) > 0$
+    
 \end{itemize}
 
 \newpage
@@ -151,6 +160,7 @@ Disjoint $A_1$, $A_2$, $A_3$...
 \subsection{Event Independence:}
 
 \begin{itemize}
+
     \item $Pr(A_1 \cap A_2 \cap A_3) = Pr(A_1)Pr(A_2)Pr(A_3)$
     
     \item Also check each pair
@@ -160,21 +170,25 @@ Disjoint $A_1$, $A_2$, $A_3$...
     \item $k$ sets: $2^k - k -1$ conditions to check
     
     \item Why pairwise independence is not enough? i.e. throwing a coin twice
+    
 \end{itemize}
 
 \subsection{Random Variable:}
 
 \begin{itemize}
+
     \item $X: \Omega \rightarrow \mathbb{R}$, sample space to real numbers
     
     \item Induced probability law: $P_X(x \in A), A \subset \mathbb{R}$, $X^{-1} (A) \subset \Omega$:
     
     $P_X(x \in A) = Pr(x^{-1} (A))$, $x^{-1} (A)$ is the event
+    
 \end{itemize}
 
 \subsection{CDF:}
 
 \begin{itemize}
+
     \item $F_X (x) = Pr(X \leq x)$
     
     \item Discrete: PMF, steps, right-continuous
@@ -182,6 +196,7 @@ Disjoint $A_1$, $A_2$, $A_3$...
     \item Continuous: PDF, $F_X (x) = \int_{-\infty}^{x} f_X(t)dt$
     
     \item Mixed
+    
 \end{itemize}
 
 \newpage
@@ -191,6 +206,7 @@ Disjoint $A_1$, $A_2$, $A_3$...
 \subsection{Transformation:}
 
 \begin{itemize}
+
     \item $Y = g(X) = g \circ X$: composition of functions
     
     $Y$ is a random variable
@@ -208,6 +224,215 @@ Disjoint $A_1$, $A_2$, $A_3$...
             &= F_X(g^{-1} (y))
         \end{aligned}
     \end{equation*}
+    
+    \begin{equation*}
+        \begin{aligned}
+            \frac{d}{dy} F_Y(y) &= \frac{d}{dy} F_X (g^{-1}(y)) \\
+            &= f_X(g^{-1}(y)) \cdot \frac{d}{dy} g^{-1} (y) \\
+            &= f_Y(y)
+        \end{aligned}
+    \end{equation*}
+    
+    \item What if $y$ is strictly decreasing and continuous?
+    
+    \begin{equation*}
+        \begin{aligned}
+            Pr(Y \leq y) &= Pr(x > g^{-1}(y)) \\
+            &= 1 - F_X(g^{-1}(y)) \\
+            f_Y(y) &= f_X(g^{-1}(y)) \cdot (- \frac{d}{dy} g^{-1}(y))
+        \end{aligned}
+    \end{equation*}
+    
+    Can use an absolute value sign here
+    
+    \item In general, for strictly increasing or decreasing functions:
+    
+    \begin{equation*}
+        \begin{aligned}
+            f_Y (y) &= f_X (g^{-1}(y))|\frac{d}{dy} g^{-1}(y)| \text{ on support} \\
+            &= 0 \text{, if out of support}
+        \end{aligned}
+    \end{equation*}
+    
+    \item 
+    
+    \begin{equation*}
+        \begin{aligned}
+            Pr(Y \leq y) &= Pr(F_X(x) \leq y) \\
+            &= Pr(x \in F^{-1}_X(y)) \\
+            &= Pr(x \leq F^{-1}_X(y)) \text{, because } F_X \text{ is increasing, CDF} \\
+            &= F_X(F^{-1}(y)) \\
+            &= y \text{, provided } 0 \leq y \leq 1 \\
+            F_Y(y) &= 1 \text{, if } y \in [0, 1] \\
+            &= 0 \text{, otherwise, i.e. a uniform random variable}
+        \end{aligned}
+    \end{equation*}
+    
+\end{itemize}
+
+\subsection{Uniform Random Variable:}
+
+\begin{itemize}
+    
+    \item $Y=F_X(x)$ is uniform
+    
+    \item $U=F^{-1}_X(y)$
+    
+    \item Every continuous random variable can be obtained by taking a function of uniform random variable
+    
+    \item Use the uniform random variable to build other random variables
+\end{itemize}
+
+\newpage
+
+\section{Lesson 5 1.28.2020}
+
+\subsection{Condense Information:}
+
+\begin{itemize}
+
+    \item $f_X(x)dx$, can be made continuous to integers, i.e. PMF and CDF
+    
+    \item $X: f_X(.)$: expected return on investment and risk
+    
+    \item Expectation: $E[X]$, a function of the distribution of a random variable
+    
+    \begin{equation*}
+        \begin{aligned}
+            E[X] &= E(f_X(x)) \\
+            &= \int_\mathbb{R} x f_X(x) dx
+        \end{aligned}
+    \end{equation*}
+    
+    The expectation does not always exist: Cauchy distribution has no expectation.
+    
+    \item Variance: $Var[X]$, a function of the distribution of random variable, also known as the second centralized moment
+    
+    \begin{equation*}
+        \begin{aligned}
+            Var[X] = \int_\mathbb{R} (x-\mu)^2 f_X(x)dx
+        \end{aligned}
+    \end{equation*}
+    
+    \item Standard deviation: $\sigma[X] = \sqrt{Var[X]}$
+    
+    \item $E[X^2]$ and $E[(X - E[X])^2]$ impose a $l_2$ structure or inner-product space
+\end{itemize}
+
+\subsection{argmin:}
+
+\begin{itemize}
+    \item 
+    
+    \begin{equation*}
+        \begin{aligned}
+            \argmin_C E[(X-C)^2]
+        \end{aligned}
+    \end{equation*}
+    
+    \item Take the derivative and set to 0
+    
+    \item Take the second derivative to check if it is min or not
+    
+    \item
+    
+    \begin{equation*}
+        \begin{aligned}
+            \argmin_c E[(X-c)^2] &= \argmin_c E[(X^2 - 2cX + c^2] \\
+            &= \argmin_c E[X^2] - 2cE[X] + E[c^2] \\
+        \end{aligned}
+    \end{equation*}
+    
+    \item Decrease $E[X^2]$, increase $E[X]$: set both to 0
+    
+    \item
+    
+     \begin{equation*}
+        \begin{aligned}
+            \frac{d}{dc} \int (x-c)^2 f_X(x) dx &= \int \frac{\partial}{\partial c} (x-c)^2 f_X(x)dx \\
+            &= \int -2(x-c) f_X(x) dx \\
+            c &= E[X] \text{, after a second derivative test} \rightarrow min\\
+        \end{aligned}
+    \end{equation*}
+    
+    \item Limit not function of $c$, Lipschitz condition, fundmental theorem of calculus, dominated convergence theorem...
+    
+\end{itemize}
+
+\subsection{Expectation, Moments and Moment Generating Function:}
+
+\begin{itemize}
+
+    \item $E[g(X)] = \int g(x) f_X(x) dx$
+    
+    \item $E[.]$ is a linear operator: $E[aX + b] = aE[X] + b$
+    
+    \item $E[X^n]$: moments
+    
+    \item $E[(X - \mu)^n]$: $n^{th}$ centralized moment
+    
+    \item $M_X(t) = E[e^{tX}]$: moment generating function
+    
+    \item The moment generating function does not always exist and exists if expectation exists in a neighbourhood of 0
+    
+    \item $X_1, X_2, X_3...$ such that the moments converge, still, the distribution may not be unique
+    
+    \item $M_{X_1}, M_{X_2}, M_{X_3}...$ such that they converge over the neighbourhood of 0, then the distribution is unique
+    
+    \item Moment generating function for general function: Laplace transform
+    
+    \item Characteristic equation: Fourier transform
+    
+\end{itemize}
+
+\subsection{Contour Integral, Complex Analysis:}
+
+\begin{itemize}
+
+    \item $\oint$ in the complex plane to reverse a Laplace transform
+    
+\end{itemize}
+
+\subsection{Gaussian Distribution:}
+
+\begin{itemize}
+    
+    \item PDF, does not have a closed form indefinite integral:
+    
+    \begin{equation*}
+        \begin{aligned}
+            f_X(x) = \frac{1}{\sigma \sqrt{2\pi}} e^{-\frac{(x-\mu)^2}{2\sigma^2}} \text{, } x \in \mathbb{R}
+        \end{aligned}
+    \end{equation*}
+    
+    \item To find out where $\frac{1}{\sqrt{2\pi}}$ comes from:
+    
+    \begin{equation*}
+        \begin{aligned}
+            \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} f_X(x) f_X(y) dx dy &= \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} e^{-\frac{x^2}{2}} e^{-\frac{y^2}{2}} dx dy \\
+            &= \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} e^{-\frac{1}{2}(x^2 + y^2)} dx dy \text{, use polar coordnates}\\
+            &= \int_{-\pi}^{\pi} \int_{0}^{\infty} r e^{-\frac{r^2}{2}} dr d\theta \\
+            &= -e^{-\frac{r^2}{2}}\big|_{0}^{\infty} - \frac{1}{2} 2r e^{-\frac{r^2}{2}} \\
+            &= 1
+        \end{aligned}
+    \end{equation*}
+    
+    \item Add $\frac{1}{\sqrt{2\pi}}$ to let the integral be 1
+    
+    \item $r$: the Jacobian, physical meaning is the contraction and the expansion of the space
+    
+    \item $Var[X] = \sigma^2$:
+    
+    \begin{equation*}
+        \begin{aligned}
+            &=\int_{-\infty}^{\infty} \frac{1}{\sigma \sqrt{2\pi}} (x - \mu)^2 e^{-\frac{(x-\mu)^2}{2\sigma^2}} dx \text{, use integration by parts to solve} \\
+            \int_{-\infty}^{\infty} \frac{1}{\sigma \sqrt{2\pi}} e^{-\frac{(x-\mu)^2}{2\sigma^2}} dx &= 1 \\
+            \frac{d}{d\sigma} \int_{-\infty}^{\infty} e^{-\frac{(x-\mu)^2}{2\sigma^2}} dx &= \frac{d}{d\sigma} \sigma \sqrt{2\pi} \\
+            \int_{-\infty}^{\infty} \frac{\partial}{\partial \sigma} e^{-\frac{(x-\mu)^2}{2\sigma^2}} dx &= \sqrt{2\pi} \\
+            \int_{-\infty}^{\infty} - e^{-\frac{(x-\mu)^2}{2\sigma^2}} \frac{(x-\mu)^2}{2\sigma^2} dx &= \sqrt{2\pi}
+        \end{aligned}
+    \end{equation*}
+    
 \end{itemize}
 
 \end{document}
