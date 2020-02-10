@@ -16,6 +16,17 @@
 
 \usepackage{pifont}
 
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+\usepackage{trace}
+
 \pagestyle{fancy}
 \lhead{}
 \rhead{}
@@ -30,7 +41,37 @@
     
 \begin{document}
 
-\section{Class 1 1.14.2020}
+\begin{titlepage}
+  \centering
+	{\scshape\large Texas A\&M University \par}
+	\vspace{1cm}
+	{\scshape\Large Department of Electrical and Computer Engineering \par}
+	\vspace{4cm}
+    \vspace{0.5cm}
+	{\huge\bfseries ECEN 662 Estimation and Detection Theory\par}
+	\vspace{4cm}
+	{\Large Notes\par}
+	\vspace{1cm}
+	{\Large Student: Lei Wang (Wilson)\par}
+	\vspace{1cm}
+	{\Large UIN: 829009485\par}
+	\vspace{1cm}
+	{\Large Instructor: Dr. Jean-Francois Chamberland\par}
+	\vspace{4cm}
+	\vfill
+
+  % Bottom of the page
+% 	{\large Submitted: February 11th, 2020 \par}
+
+\end{titlepage}
+
+\newpage
+
+\tableofcontents{}
+
+\newpage
+
+\section{Lesson 1 1.14.2020}
 
 Statistical inference.
 
@@ -47,14 +88,126 @@ Statistical inference.
 
 \subsection{Sample Space:}
 
-A collection of subsets of S is called a sigma algebra B if it satisfies the 3 properties:
+A sample space $\Omega$ contains the outcomes $\omega$, which are disjoint, mutually exclusive and collectively exhaustive.
+
+A collection of subsets of $S$ is called a sigma algebra $B$ if it satisfies the 3 properties:
 
 \begin{enumerate}
     \item $\phi \in B$
     
     \item If $A \in B$, then $A^C \in B$
     
-    \item If $A_1, A_2... \in B$, then $$
+    \item If $A_1, A_2... \in B$, then $\bigcup\limits_{i=1}^{\infty} \in B$ (closed under countable unions)
 \end{enumerate}
+
+From Wikipedia: In mathematical analysis and in probability theory, a $\sigma$-algebra (also $\sigma$-field) on a set $X$ is a collection $\sum$ of subsets of $X$ that includes $X$ itself, is closed under complement, and is closed under countable unions.
+
+\newpage
+
+\section{Lesson 2 1.16.2020}
+
+\subsection{Conditional Probability:}
+
+\begin{equation*}
+    Pr(A|B) = \frac{Pr(A\cap B)}{Pr(B)} \in [0, 1] \text{, } Pr(A\cap B) \in [0, Pr(B)] \text{, } Pr(B) > 0
+\end{equation*}
+
+\begin{itemize}
+    \item Restriction to the sample space
+    
+    \item $Pr(.|B)$: new probability laws, still need to satisfy the 3 axioms
+    
+    \item $Pr(B) = \sum Pr(B|A_i)Pr(A_i)$
+\end{itemize}
+
+\subsection{Countable Additivity:}
+
+Disjoint $A_1$, $A_2$, $A_3$...
+
+\begin{equation*}
+    \begin{aligned}
+        Pr(\bigcup\limits_{i=1}^{\infty} A_i) &= \sum_{i=1}^{\infty} Pr(A_i) \\
+        Pr(\{\bigcup\limits_{i=1}^{\infty} A_i\}|B) &= \frac{Pr(\{\bigcup\limits_{i=1}^{\infty} A_i \}\cap B)}{Pr(B)} \text{, the numerator distributes the set over the union} \\
+        &= \frac{Pr(\bigcup\limits_{i=1}^{\infty} \{A_i \cap B\})}{Pr(B)} \\
+        &= \frac{\sum\limits_{i=1}^{\infty} Pr(A_i \cap B)}{Pr(B)} \\
+        &= \sum\limits_{i=1}^{\infty} Pr(A_i | B) \\
+    \end{aligned}
+\end{equation*}
+
+\subsection{Independence:}
+
+\begin{itemize}
+    \item $Pr(A \cap B) = Pr(A) Pr(B)$
+    
+    \item $Pr(A|B) = \frac{Pr(A \cap B)}{Pr(B)} = \frac{Pr(A)Pr(B)}{Pr(B)} = Pr(A)$, if independent and $Pr(B) > 0$
+    
+    \item $Pr(B|A) = Pr(B)$ if independent and $Pr(A) > 0$
+\end{itemize}
+
+\newpage
+
+\section{Lesson 3 1.21.2020}
+
+\subsection{Event Independence:}
+
+\begin{itemize}
+    \item $Pr(A_1 \cap A_2 \cap A_3) = Pr(A_1)Pr(A_2)Pr(A_3)$
+    
+    \item Also check each pair
+    
+    \item 3 sets, 4 conditions to check
+    
+    \item $k$ sets: $2^k - k -1$ conditions to check
+    
+    \item Why pairwise independence is not enough? i.e. throwing a coin twice
+\end{itemize}
+
+\subsection{Random Variable:}
+
+\begin{itemize}
+    \item $X: \Omega \rightarrow \mathbb{R}$, sample space to real numbers
+    
+    \item Induced probability law: $P_X(x \in A), A \subset \mathbb{R}$, $X^{-1} (A) \subset \Omega$:
+    
+    $P_X(x \in A) = Pr(x^{-1} (A))$, $x^{-1} (A)$ is the event
+\end{itemize}
+
+\subsection{CDF:}
+
+\begin{itemize}
+    \item $F_X (x) = Pr(X \leq x)$
+    
+    \item Discrete: PMF, steps, right-continuous
+    
+    \item Continuous: PDF, $F_X (x) = \int_{-\infty}^{x} f_X(t)dt$
+    
+    \item Mixed
+\end{itemize}
+
+\newpage
+
+\section{Lesson 4 1.23.2020}
+
+\subsection{Transformation:}
+
+\begin{itemize}
+    \item $Y = g(X) = g \circ X$: composition of functions
+    
+    $Y$ is a random variable
+    
+    $Pr(Y \in A)$
+    
+    $Y = g \circ X \rightarrow Pr(g(X) \in A) = Pr(x \in g^{-1}(A))$: $g^{-1}(A) \rightarrow$ event under $P_X$, the pre-image of $A$ under $g$
+    
+    \item Suupose $G$ is strictly increasing and continuous. How to you relate $f_Y(.)$ to $f_X(.)$?
+    
+    \begin{equation*}
+        \begin{aligned}
+            Pr(Y \leq y) &= Pr(x \in g^{-1}((-\infty, y])) \\
+            &= Pr(x \in (-\infty, g^{-1} (y)]) \\
+            &= F_X(g^{-1} (y))
+        \end{aligned}
+    \end{equation*}
+\end{itemize}
 
 \end{document}
