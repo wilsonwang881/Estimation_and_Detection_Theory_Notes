@@ -11,6 +11,7 @@
 \usepackage{amsmath}
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
+\renewcommand{\vec}[1]{\mathbf{#1}}
 
 \usepackage{amssymb}
 
@@ -28,6 +29,8 @@
 }
 
 \usepackage{trace}
+
+\usepackage{tikz}
 
 \pagestyle{fancy}
 \lhead{}
@@ -425,13 +428,497 @@ Disjoint $A_1$, $A_2$, $A_3$...
     
     \begin{equation*}
         \begin{aligned}
-            &=\int_{-\infty}^{\infty} \frac{1}{\sigma \sqrt{2\pi}} (x - \mu)^2 e^{-\frac{(x-\mu)^2}{2\sigma^2}} dx \text{, use integration by parts to solve} \\
+            Var[X] &=\int_{-\infty}^{\infty} (x - \mu)^2 \frac{1}{\sigma \sqrt{2\pi}} e^{-\frac{(x-\mu)^2}{2\sigma^2}} dx \text{, use integration by parts to solve} \\
             \int_{-\infty}^{\infty} \frac{1}{\sigma \sqrt{2\pi}} e^{-\frac{(x-\mu)^2}{2\sigma^2}} dx &= 1 \\
             \frac{d}{d\sigma} \int_{-\infty}^{\infty} e^{-\frac{(x-\mu)^2}{2\sigma^2}} dx &= \frac{d}{d\sigma} \sigma \sqrt{2\pi} \\
             \int_{-\infty}^{\infty} \frac{\partial}{\partial \sigma} e^{-\frac{(x-\mu)^2}{2\sigma^2}} dx &= \sqrt{2\pi} \\
-            \int_{-\infty}^{\infty} - e^{-\frac{(x-\mu)^2}{2\sigma^2}} \frac{(x-\mu)^2}{2\sigma^2} dx &= \sqrt{2\pi}
+            \int_{-\infty}^{\infty} e^{-\frac{(x-\mu)^2}{2\sigma^2}} \frac{(x-\mu)^2}{\sigma^3} dx &= \sqrt{2\pi} \\
+            \int_{-\infty}^{\infty} \frac{(x-\mu)^2}{\sigma\sqrt{2\pi}} e^{-\frac{(x-\mu)^2}{2\sigma^2}} dx &= \sigma^2
         \end{aligned}
     \end{equation*}
+    
+\end{itemize}
+
+\subsection{Inequalities:}
+
+\begin{itemize}
+
+    \item Expection on functions:
+    
+    \begin{equation*}
+        \begin{aligned}
+            g(x) &\leq h(x) \\
+            \int_{a}^{b} g(x) dx &\leq \int_{a}^{b} h(x) dx \\
+            f_X(x) g(x) &\leq f_X(x) h(x) \text{, therefore} \\
+            \int f_X(x) g(x) dx &\leq \int f_X(x) h(x) dx \\
+            E[g(x)] &\leq E[h(x)]
+        \end{aligned}
+    \end{equation*}
+
+    \item Indicator function:
+    
+    \begin{equation*}
+        \begin{aligned}
+            Pr(x \geq a) &= E[\mathbb{I}_{[a, \infty]}(x)], x \geq 0 \\
+            Pr(x \geq a) &\leq \frac{1}{a} E[X] \text{, Markov Inequality}
+        \end{aligned}
+    \end{equation*}
+
+\end{itemize}
+
+\newpage
+
+\section{Lesson 6 1.30.2020}
+
+\subsection{Multi-Variable Random Variables:}
+
+\begin{itemize}
+
+    \item Joint cumulative function: consider the two-variable scenario
+    
+    \begin{equation*}
+        \begin{aligned}
+            F_{X, Y}(x, y) &= Pr(X \leq x, Y \leq y) \\
+            &= Pr(\{\omega \in \Omega: X(\omega) \leq x, Y(\omega) \leq y\})
+        \end{aligned}
+    \end{equation*}
+    
+    \item Marginal distribution: 
+    
+    \begin{equation*}
+        \begin{aligned}
+            \lim_{y \to \infty} F_{X, Y} (x, y) &= F_X(x) \\
+            \lim_{x \to -\infty} F_{X, Y} (x, y) &= 0
+        \end{aligned}
+    \end{equation*}
+    
+    \item Joint PDF:
+    
+    \begin{equation*}
+        \begin{aligned}
+            f_{X, Y}(x, y) &= \frac{\partial^2}{\partial x \partial y} F_{X, Y}(x, y) \\
+            \int_\mathbb{R} \int_\mathbb{R} f_{X, Y}(x, y) dx dy &= 1
+        \end{aligned}
+    \end{equation*}
+    
+\end{itemize}
+
+\subsection{Indicator Function:}
+
+\begin{equation*}
+    \begin{aligned}
+        Pr(A) &= \int_A f_X(x) dx \\
+        &= \int_\mathbb{R} \mathbb{I}_{A(x)} f_X(d) dx
+    \end{aligned}
+\end{equation*}
+
+\subsection{Conditional Probability:}
+
+\begin{itemize}
+
+    \item PDF: given event $A$
+    
+    \begin{equation*}
+         F_X|A(x) =\frac{Pr(\{X \leq x\} \cap A)}{Pr(A)}
+    \end{equation*}
+    
+    \item CDF:
+    
+    \begin{equation*}
+        f_{X|A}(x) = \frac{\partial}{\partial x} F_{X|A}(x)
+    \end{equation*}
+    
+    \item Conditioning on a value: $X$, $Y$ are continuous random variables
+    
+    \begin{equation*}
+        f_{X|Y}(x|y) = \frac{f_{X, Y}(x, y)}{f_Y(y)}
+    \end{equation*}
+    
+    Cannot get this from the definition of probabilities:
+    
+    
+    \begin{equation*}
+        \begin{aligned}
+            Pr(x \leq X \leq x + \Delta x, y \leq Y \leq y + \Delta y) \text{, } X, Y \text{ have non-vanishing probability} \\
+        \end{aligned}
+    \end{equation*}
+    
+    Therefore,
+    
+    \begin{equation*}
+        \begin{aligned}
+            f_{X|Y}(x|y) &= \frac{Pr(x \leq X \leq x + \Delta x, y \leq Y \leq y + \Delta y)}{Pr(y \leq Y \leq y + \Delta y)} \text{, using the Riemann approach} \\
+            &\approx \frac{f_{X, Y}(x, y) \Delta x \Delta y}{f_Y(y) \Delta y} \text{, joint PDF needs to be smooth enough} \\
+            &= f_{X|Y}(x|y) dx
+        \end{aligned}
+    \end{equation*}
+    
+    Suppose $f_X(x)$, $u = g(x)$, $g(x)$ being strictly increasing and differentiable,
+    
+    \begin{equation*}
+        \begin{aligned}
+            f_U(u) &= f_X(g^{-1}(u)) \cdot |g'(x)| \\
+            f_X(x) dx &\rightarrow f_U(x) \frac{dx}{du} \cdot du
+        \end{aligned}
+    \end{equation*}
+    
+\end{itemize}
+
+\subsection{Joint Gaussian Distribution:}
+
+\begin{itemize}
+
+    \item PDF
+
+    \begin{equation*}
+        \begin{aligned}
+            f_{X, Y}(x, y) &= \frac{1}{2 \pi} e^{-\frac{1}{2} (x^2 + y^2)} \\
+            f_{\vec{X}, \vec{Y}}(\vec{x}, \vec{y}) &= \frac{1}{2 \pi |\Sigma|} e^{-\frac{1}{2}(\vec{x} - \vec{y})^{T} \Sigma^{-1}(\vec{x} - \vec{y})}
+        \end{aligned}
+    \end{equation*}
+    
+    \item Gaussian vectors: $ \vec{X} = [x_1, x_2, x_3...]$, $E[\vec{X}]$, $E[(\vec{X} - E[\vec{X}])(\vec{X} - E[\vec{X}])^T]$
+    
+    \begin{equation*}
+        \begin{aligned}
+            f_{\vec{X}}(\vec{x}) &= \frac{1}{(2 \pi)^{\frac{n}{2}} |\Sigma|^{\frac{1}{2}}} e^{-\frac{1}{2} (\vec{x} - E[\vec{X}])^{T} \Sigma^{-1}(\vec{x} - E[\vec{X}])}
+        \end{aligned}
+    \end{equation*}
+    
+    \item $Y = X + N$: $X$, $N$ Gaussian and independent
+    
+    \begin{equation*}
+        \begin{aligned}
+            f_{X, Y}(x, y) &= \frac{1}{2 \pi \sigma_x \sigma_y} e^{-\frac{1}{2} (x^2 = y^2)} \\
+            E[Y] &= 0 \\
+            E[Y^2] &= E[(X + N)^2] \\
+            &= E[X^2 + N^2 + 2X N] \\
+            &= 1 + 1 + 2 E[X N] \\
+            &= 2 \\
+            Var[Y] &= 2 - 0 \\
+            &= 2
+        \end{aligned}
+    \end{equation*}
+    
+    \item Joint Gaussian: marginalize $\rightarrow$ Gaussian
+    
+    \item Joint Gaussian: conditional $\rightarrow$ Gaussian
+    
+\end{itemize}
+
+\newpage
+
+\section{Lesson 7 2.4.2020}
+
+\subsection{Linear Regression:}
+
+\begin{itemize}
+
+    \item A number of data points: hope to draw a line of best fit
+    
+    \item To do so, need to minimize the distance between the output and the data $\rightarrow$ or the square of the distance
+    
+\end{itemize}
+
+\subsection{Convex Function:}
+
+\begin{itemize}
+    
+    \item Inverse: expensive, not always feasible
+    
+    \item Use an iterative approach, i.e. gradient descent, but may step over the optimal
+    
+\end{itemize}
+
+\subsection{Loss Function:}
+
+\begin{itemize}
+    
+    \item Measure on how well the prediction is: $y - \hat{y}$ (real - predict)
+    
+    \item Make the loss function convex: $(y - \hat{y}^2)$
+    
+    \item Mean square error: $y_i$ is the observation, does not depend on anything
+    
+    \begin{equation*}
+        \begin{aligned}
+            \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y_i})^2 = \frac{1}{n} \sum_{i=1}^{n} (y_i - (\beta_1 x_i + \beta_0))^2
+        \end{aligned}
+    \end{equation*}
+    
+    To minimize the mean square error:
+    
+    \begin{equation*}
+        \begin{aligned}
+            \frac{\partial}{\partial \beta_1} \frac{1}{n} \sum_{i=1}^{n} (y_i - (\beta_1 x_i + \beta_0))^2 &= \frac{\partial}{\partial \beta_1} \frac{1}{n} \sum_{i=1}^{n} (y_i^2 + (\beta_1 x_i + \beta_0)^2 - 2 y_i (\beta_1 x_i + \beta_0)) \\
+            &= \frac{1}{n} \sum_{i=1}^{n} 2(\beta_1 x_i) \cdot x_i - 2 y_i x_i \\
+            &= \frac{1}{n} \sum_{i=1}^{n} 2\beta_1 x_i^2 - 2 y_i x_i \\
+            \frac{\partial}{\partial \beta_0} \frac{1}{n} \sum_{i=1}^{n} (y_i - (\beta_1 x_i + \beta_0))^2 &= \frac{1}{n} \sum_{i=1}^{n} 2 (y_i - \beta_1 x_i - \beta_0)(-1) \\
+            &= \frac{1}{n} \sum_{i=1}^{n} 2 ( - y_i + \beta_1 x_i + \beta_0)
+        \end{aligned}
+    \end{equation*}
+    
+    Complexity: $O(n)$, also highly parallizable
+    
+    \item Apply gradient descent to a loss function: update $\beta$ to move to a better line
+    
+    \begin{equation*}
+        \begin{aligned}
+            \beta_1^{j+1} &= \beta_1^{j} + \frac{\partial}{\partial \beta_i^j} \cdot l \\
+            \beta_0^{j+1} &= \beta_0^{j} + \frac{\partial}{\partial \beta_0^j} \cdot l \\
+        \end{aligned}
+    \end{equation*}
+    
+\end{itemize}
+
+\newpage
+
+\section{Lesson 8 2.6.2020}
+
+\subsection{Random Sample:}
+
+A sequence of random variables $x_1, x_2, x_3...$ and call them a random sample of size $n$ from population $f(x)$ if $x_1, x_2, x_3...$ are independent, each with marginal distribution $f(.)$:
+
+\begin{equation*}
+    f(x_1, x_2, x_3...) = \prod_{i=1}^{n} f(x_i)
+\end{equation*}
+
+\subsection{Statistic:}
+
+\begin{itemize}
+
+    \item Let $_1, x_2, x_3...$ be a sequence of random variables. Let $T(x_1, x_2, x_3...)$ be a real-value function whose domain includes the sample space of $(x_1, x_2, x_3...)$.
+    
+    \item Random variable $Y = T(x_1, x_2, x_3...)$ is called a statistic
+    
+    \item The probability distribution of $Y$ is called the sample distribution
+    
+    \item Example: 
+    
+    The empirical average/sample average
+    
+    \begin{equation*}
+        \begin{aligned}
+            \Bar{x} = \frac{1}{n}(x_1, x_2, x_3...) = \frac{1}{n} \sum_{i=1}^{n} x_i
+        \end{aligned}
+    \end{equation*}
+    
+    The sample variance is defined by:
+    
+    \begin{equation*}
+        S^2 = \frac{1}{n-1} \sum_{i=1}^{n} (x_i - \Bar{x})^2
+    \end{equation*}
+    
+    Sample standard deviation:
+    
+    \begin{equation*}
+        S = \sqrt{S^2}
+    \end{equation*}
+
+\end{itemize}
+
+\subsection{argmin:}
+
+\begin{itemize}
+
+    \item Proposition: let $x_1, x_2, x_3...$ and $\Bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i$
+    
+    \begin{equation*}
+        \argmin_a \sum_{i=1}^{n} (x_i - a)^2 = \sum_{i=1}^{n} (x_i - \Bar{x})^2
+    \end{equation*}
+    
+    $E[(X-a)^2]$: $a = E[X]$ to minimize the whole E[.]
+    
+    Proof:
+    
+    \begin{equation*}
+        \begin{aligned}
+            \sum_{i=1}^{n} (x_i - a)^2 &= \sum_{i=1}^{n} (x_i - \Bar{x} + \Bar{x} - a)^2 \\
+            &= \sum_{i=1}^{n} [(x_i - \Bar{x})^2 + 2(x_i - \Bar{x})(\Bar{x} - a) + (\Bar{x} - a)^2] \\
+            &= \sum_{i=1}^{n} (x_i - \Bar{x})^2 + 2(\Bar{x} - a) \sum_{i=1}^{n} (x_i - \Bar{x}) + \sum_{i=1}^{n} (x_i - a)^2 \\
+            &= \sum_{i=1}^{n} (x_i - \Bar{x})^2  + \sum_{i=1}^{n} (x_i - a)^2 \\
+            a &= \Bar{x}
+        \end{aligned}
+    \end{equation*}    
+    
+\end{itemize}
+
+\subsection{Expectation and Variance on Functions:}
+
+\begin{itemize}
+
+    \item Let $x_1, x_2, x_3...$ be a random sample. Let $g(X)$ be a function such that $E[g(X)]$ and $Var[g(X)]$ exist, then
+    
+    \begin{enumerate}
+    
+        \item $E[\sum_{i=1}^{n} g(x_i)] = n E[g(x_1)]$
+        
+        Proof: due to i.i.d.
+        
+        \begin{equation*}
+            E[\sum_{i=1}^{n} g(x_i)] = \sum_{i=1}^{n} E[g(x_i)] = n E[g(x_1)]
+        \end{equation*}
+        
+        \item $Var[\sum_{i=1}^{n} g(x_i)] = n Var[g(x_1)]$
+        
+        Proof:
+        
+        \begin{equation*}
+            \begin{aligned}
+                Var[\sum_{i=1}^{n} g(x_i)] &= E[(\sum_{i=1}^{n}g(x_i) - E[\sum_{i=1}^{n}g(x_i)])^2] - E[\sum_{i=1}^{n}g(x_i) - E[\sum_{i=1}^{n}g(x_i)]]^2 \\    
+                &= \sum_{i=1}^{n} E[(g(x_i) - E[g(x_i)])^2] + \sum_{i=1}^{n}\sum_{j \neq i}^{n} E[(g(x_i) - E[g(x_i)])(g(x_j) - E[g(x_j)])] \\
+                &= n Var[g(x_i)]
+            \end{aligned}
+        \end{equation*}
+        
+        i.e.
+        
+        \begin{equation*}
+            \begin{aligned}
+                g(x) &= \frac{1}{n} x \\
+                n Var[\frac{1}{n} X] &= \frac{1}{n} Var[X]
+            \end{aligned}
+        \end{equation*}
+        
+        i.e.
+        
+        \begin{equation*}
+            \begin{aligned}
+                \Bar{x} &= \frac{1}{n} \sum_{i=1}^{n} x_i \\
+                E[\Bar{x}] &= E[X]
+            \end{aligned}
+        \end{equation*}
+        
+    \end{enumerate}
+    
+    
+\end{itemize}
+    
+\subsection{Empirical and Theoretical:}
+
+\begin{itemize}
+    
+    \item 
+    
+    \begin{equation*}
+        \begin{aligned}
+            E[S^2] &= E[\frac{1}{n-1} \sum_{i=1}^{n} (x_i - \Bar{x})^2] \\
+            S^2 &= \frac{1}{n-1} \sum_{i=1}^{n} (x_i - \Bar{x})^2 \\
+            \sum_{i=1}^{n} (x_i - \Bar{x})^2 &=  \sum_{i=1}^{n} (x_i^2 - \Bar{x}^2) \\
+            E[S^2] &= \frac{1}{n-1} E[\sum_{i=1}^{n} x_i^2 - n \Bar{x}^2] \\
+            &= \frac{1}{n-1} (n E[x_1^2] - n E[\Bar{x}^2]) \\
+            &= \frac{1}{n-1} (n Var[X] + n E[X]^2 - n (\frac{1}{n} Var[X] + E[X]^2)) \\
+            &= \frac{1}{n-1} (n - 1) Var[X]
+        \end{aligned}
+    \end{equation*}
+    
+    Therefore,
+    
+    \begin{equation*}
+        E[S^2] = Var[X]
+    \end{equation*}
+    
+    \item Use one degree of freedom to create $\Bar{X}$
+    
+\end{itemize}
+
+\subsection{Markov Bound for Non-Negative Random Variables:}
+
+\begin{itemize}
+    
+    \item 
+    
+    \begin{equation*}
+        Pr(X \geq a) \leq \frac{E[X]}{a}
+    \end{equation*}
+    
+    \item
+    
+    \begin{figure}[ht]
+    \centering
+        \begin{tikzpicture}
+          \draw[->] (-1,0) -- (3.5,0) node[right] {$x$};
+          \draw[->] (0,-1) -- (0,2) node[above] {$Pr(x \geq a)$};
+          \draw[scale=1,domain=0:2,smooth,variable=\x,blue] plot ({\x},{\x});
+          \draw[scale=1,domain=1:3.5,smooth,variable=\x,red] plot ({\x},{1});
+          \draw (0.8,1.5) node {$y = \frac{1}{a} x$};
+          \draw[scale=1,domain=0:1,dotted,variable=\x,red] plot ({1},{\x});
+          \draw (1,-0.5) node {$E[a]$};
+          \draw[scale=1,domain=0:1,dotted,variable=\y,red] plot ({\y},{1});
+          \draw (-0.5,1) node {$1$};
+        \end{tikzpicture}
+        \caption{Markov inequality.}
+    \end{figure}
+    
+\end{itemize}
+
+\newpage
+
+\subsection{Chebyshev Bound:}
+
+Generalized version of the Markov bound
+
+\begin{equation*}
+    Pr(|X| \geq a) = \int \mathbb{I}_{{|x| \geq a}} f(x) dx \leq \frac{E[X^2]}{a^2}
+\end{equation*}
+
+\begin{figure}[ht]
+\centering
+    \begin{tikzpicture}
+      \draw[->] (-3,0) -- (3,0) node[right] {$x$};
+      \draw[->] (0,-0.5) -- (0,3) node[above] {$Pr(|x| \geq a)$};
+      \draw[scale=1,domain=-1.5:1.5,smooth,variable=\x,blue] plot ({\x},{\x * \x});
+      \draw[scale=1,domain=1:3.5,smooth,variable=\x,red] plot ({\x},{1});
+      \draw[scale=1,domain=-1:-3.5,smooth,variable=\x,red] plot ({\x},{1});
+      \draw[scale=1,domain=0:1,dotted,variable=\x,red] plot ({1},{\x});
+      \draw (1,-0.5) node {$a$};
+      \draw[scale=1,domain=0:1,dotted,variable=\x,red] plot ({-1},{\x});
+      \draw (-1,-0.5) node {$-a$};
+      \draw[scale=1,domain=-1:1,dotted,variable=\y,red] plot ({\y},{1});
+      \draw (-0.3,1.3) node {$1$};
+    \end{tikzpicture}
+    \caption{Chebyshev inequality.}
+\end{figure}
+
+\subsection{Cantelli's Inequality:}
+
+\begin{itemize}
+    
+    \item $Pr(x - \mu \geq a)$ using a quadratic function: $h(y) = (y + b)^2$
+    
+    \begin{figure}[ht]
+    \centering
+        \begin{tikzpicture}
+          \draw[->] (-3,0) -- (3,0) node[right] {$x$};
+          \draw[->] (0,-0.5) -- (0,3) node[above] {$Pr(|x| \geq a)$};
+          \draw[scale=1,domain=-1:2,smooth,variable=\x,blue] plot ({\x},{(\x - 0.5)^2});
+          \draw[scale=1,domain=1.5:3.5,smooth,variable=\x,red] plot ({\x},{1});
+          \draw[scale=1,domain=-0.5:-3.5,smooth,variable=\x,red] plot ({\x},{1});
+          \draw[scale=1,domain=0:1,dotted,variable=\x,red] plot ({1.5},{\x});
+          \draw (1,-0.5) node {$a + \mu$};
+          \draw[scale=1,domain=0:1,dotted,variable=\x,red] plot ({-1.5},{\x});
+          \draw (-1,-0.5) node {$-a + \mu$};
+          \draw[scale=1,domain=-1.5:1.5,dotted,variable=\y,red] plot ({\y},{1});
+          \draw (-0.3,1.3) node {$1$};
+        \end{tikzpicture}
+        \caption{Cantelli's inequality.}
+    \end{figure}
+    
+    \item Shifted quadratic: $\Tilde{h}(y) = \frac{(y + b)^2}{(a + \mu + b)^2}$
+    
+    \item Assume for the ease of the problem, assume $\mu = 0$: $\Tilde{h}(y) = \frac{(y + b)^2}{(a + b)^2}$, so that the function is above the corner
+    
+    \item
+    
+    \begin{equation*}
+        \begin{aligned}
+            Pr(Y \geq a) &\leq \frac{E[(Y + b)^2]}{(a + b)^2} \\
+            &= \frac{E[Y^2] + 2 b E[Y] + b^2}{(a + b)^2} \\
+            &= \frac{\sigma^2 + b^2}{(a + b)^2}, b > 0
+        \end{aligned}
+    \end{equation*}
+    
+    \item Family of bounds parameterized by $b$: take the highest bound, $\min_{b>0} \frac{\sigma^2 + b^2}{(a + b)^2}$
     
 \end{itemize}
 
