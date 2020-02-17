@@ -922,4 +922,370 @@ Generalized version of the Markov bound
     
 \end{itemize}
 
+\newpage
+
+\section{Lesson 9 2.11.2020}
+
+\subsection{Foundation of Statistical Inference:}
+
+\begin{itemize}
+
+    \item Use PDF $f(x)$ to infer the output $Y$
+    
+    \item $f(x)$ is a family of distribution based on parameter $\theta$: $f_\theta(x)$ or $f(x;\theta)$
+    
+    \item Inference: also known as the reverse problem
+    
+    \item Inference problem: collection of probability distributions, reveals something about $\theta$
+    
+    \item $\theta$ can be thought of as the attribute set
+    
+    \item For instance:
+    
+    \begin{gather*}
+        \begin{cases}
+            f_0 \sim N(0, \sigma^2) \\
+            f_1 \sim N(1, \sigma^2)
+        \end{cases}
+    \end{gather*}
+    
+    One candidate is to pick the bigger one, i.e. the maximum likelihood solution: $\max_{\theta} f_{\theta}(y)$
+    
+    The solution is: $\argmax_{\theta} f_{\theta}(y)$
+    
+    \item Engineers usually provide solution, as well as optimization
+    
+\end{itemize}
+
+\subsection{Likelihood Function:}
+
+\begin{itemize}
+    
+    \item $L(\theta; y) = f_{\theta}(y)$: $\theta$ fixed, $y$ is the argument
+    
+    \item Defined pointwise
+    
+    \item Take the PDF of $\theta$, evaluate at $y$
+    
+    \item Get 1 if integrating the PDF: normalization
+    
+    \item Think $y$ as fixed, $\theta$ as the parameter
+    
+    \item Example:
+    
+    Suppose the parameter space is finite and under the classical setting:
+    
+    \begin{equation*}
+        f_n(y), \theta = 1..n
+    \end{equation*}
+    
+    One possible objective function:
+    
+    \begin{equation*}
+        \max f_n(y)
+    \end{equation*}
+    
+    The solution will be:
+    
+    \begin{equation*}
+        \argmax_{n} f_n(y) = \hat{\theta}_{ML}
+    \end{equation*}
+    
+    \item View the attribute set as probability set: $P(\theta)$ or the PMF, if finite number of $\theta$s
+    
+    \item Collective goal: produce $\hat{\theta}(y)$ estimator: a function that $\hat{\theta}: y \rightarrow \Theta$
+    
+    \item Reasonable objective function to evaluate $\hat{\theta}$: $\max f_{\theta}(y) Pr(\theta)$
+    
+    Answer: i.e. in the discrete case
+    
+    \begin{equation*}
+        \argmax_{\theta} f_{\theta} f_{\theta}(y) Pr(\theta) = \hat{\theta}_{MAP}
+    \end{equation*}
+    
+    Detour:
+    
+    \begin{equation*}
+        \begin{aligned}
+            Pr(\theta|y) &= \frac{Pr(\theta \cap \{Y = y\})}{Pr(Y = y)} \\
+            &\propto Pr(\theta \cap \{Y = y\}) \text{, directly proportional} \\
+            &= f(y|\theta) Pr(\theta) \\
+            &= f_{\theta}(y) Pr(\theta)
+        \end{aligned}
+    \end{equation*}
+    
+    If $Pr(\theta) = \frac{1}{n}$, then:
+    
+    \begin{equation*}
+        \begin{aligned}
+            \argmax_{\theta} f_{\theta}(y) Pr(\theta) &= \argmax_{\theta} f_{\theta}(y) \frac{1}{n} \\
+            &= \argmax_{\theta} f_{\theta}(y)
+        \end{aligned}
+    \end{equation*}
+    
+    It is a maximum likelihood condition, even under a Bayesian setting.
+    
+    \item What if $\theta$ is in a continuous space: $\theta$ uncountable but smooth
+    
+    Objective function: $\max f_{\theta}(y)$
+    
+    Solution: $\argmax_{\theta} f_{\theta}(y) = \hat{\theta}_{ML}$
+    
+    Or for MAP: $\argmax_{\theta} f_{\theta}(y) f(\theta)$
+    
+\end{itemize}
+
+\subsection{Criterion:}
+
+\begin{itemize}
+    
+    \item A norm squared, the mean square error: MSE
+    
+    \begin{equation*}
+        ||\hat{\theta}(y) - \theta(y)||_2^2 = E[(\hat{\theta}(y) - \theta(y))^2]
+    \end{equation*}
+    
+    \item Find a $\hat{\theta}(y)$ that minimizes mean square error: minimum mean square error, MMSE
+    
+    \item Overall: optimization applied to specific fields
+    
+    \item For a difficult problem:
+    
+    \begin{itemize}
+        
+        \item Constrain the solution space, i.e. a certain type of function, instead of all possible solution, i.e. the linear function space
+        
+        \item LMMSE instead of MMSE: L for linear
+        
+        \item To make the problem solvable
+        
+    \end{itemize}
+    
+    \item Constraint: some knowledge about the solution $\rightarrow$ becomes a constrained optimization problem, i.e.
+    
+    \begin{equation*}
+        \begin{aligned}
+            Y &= AX + N \\
+            Y &= A \theta + N \text{, $X$ plays the role of $\theta$}
+        \end{aligned}
+    \end{equation*}
+    
+    Want to produce:
+    
+    \begin{equation*}
+        \hat{\Theta}(y) = \argmin_{\hat{\theta}} E[(\hat{\theta} - \theta)^2]
+    \end{equation*}
+    
+    What if $\theta$ is sparse, i.e.:
+    
+    \begin{equation*}
+        ||\hat{\theta(y)}||_{0} = k
+    \end{equation*}
+    
+\end{itemize}
+
+\subsection{Log Likelihood:}
+
+\begin{itemize}
+    
+    \item Sometimes the observation is a vector: $\Bar{y} = (y_1...y_m)$, from $\theta$ (one $\theta$), same for all the observation:
+    
+    \begin{equation*}
+        \begin{aligned}
+            f_{\theta}(y_1...y_m) &= \prod_{i = 1}^{m} f_{\theta}(y_i) \text{, conditional independent} \\
+            L(\Bar{y}; \theta) &= f_{\theta}(y_1...y_m) \\
+            &= \prod_{i = 1}^{m}f_{\theta}(y_i) \\
+            &= \prod_{i = 1}^{m} L(y_i; \theta) \text{, based on a scalar value instead of vector} \text{, apply $\log$} \\
+            \frac{1}{m} \log L(\Bar{y}; \theta) &= \frac{1}{m} \sum_{i = 1}^{m} \log L(y_i; \theta) \\
+            &= \frac{1}{m} \sum_{i = 1}^{m} log L(y_i; \theta)
+        \end{aligned}
+    \end{equation*}
+    
+    LLN, normalized sum of i.i.d. random variables
+    
+\end{itemize}
+
+\newpage
+
+\section{Lesson 10 2.13.2020}
+
+\subsection{Principle of Data Reduction:}
+
+\begin{itemize}
+    
+    \item $X$: observation, say something about $\theta$
+    
+    \item A sequence of observation: $x_1, x_2...x_n = \Bar{X}$
+    
+    \item $T(\Bar{X}), X^n \rightarrow \mathbb{R}$: a statistic, a realization of the data, functions
+    
+    \item Example:
+    
+    \begin{equation*}
+        \begin{aligned}
+            T_1(\Bar{X}) &= \frac{1}{n} \sum_{i = 1}^{n} x_i \text{, the empirical mean} \\
+            T_2(\Bar{X}) &= \frac{1}{n - 1} \sum_{i = 1}^{n} (x_i - \Bar{X})^2 \text{, the empirical variance} \\
+            T_3(\Bar{X}) &= \max_{i = 1..n} x_i \\
+            T_4(\Bar{X}) &= \min_{i = 1..n} x_i
+        \end{aligned}
+    \end{equation*}
+    
+    \item Need to reduce data in many cases
+    
+    \item Example:
+    
+    Vote for one of the two candidates:
+    
+    \begin{gather*}
+        B = 
+        \begin{cases}
+        1 \text{, with probability $\theta$} \\
+        0\text{, with probability $1-\theta$} \\
+        \end{cases}
+    \end{gather*}
+    
+    Poll result: $(w...w) \rightarrow$ a really long vector that can come up with a prediction for $\theta$. Do I need to carry the vector around? Can I reduce the vast amount of data without losing "information" in a statistical sense and performance? i.e. $T: {0, 1}^10000 \rightarrow \mathbb{N}$
+    
+    \begin{equation*}
+        T: {0, 1}^{10000} \rightarrow \mathbb{R} \text{, } T(\Bar{B}) = \frac{||b||_1}{10000}
+    \end{equation*}
+    
+    \item $X...\rightarrow \theta$: $X$ gives some information about $\theta$
+    
+    \item $X...\rightarrow T(X) ... \rightarrow\theta$: reduce $X$ using $T(.)$, then give some information about $\theta$, without losing "information"
+    
+\end{itemize}
+
+\subsection{The Likelihood Function:}
+
+\begin{itemize}
+    
+    \item $L(\theta, \Bar{X}) = f_{\theta}(\Bar{X})$: know the relation between $\theta$ and $\Bar{X}$
+    
+    \item Use the notion of conditional probability:
+    
+    \begin{equation*}
+        \begin{aligned}
+            P_{\theta}(\Bar{X} = x, T(\Bar{X}) = t) &= P_{\theta}(\Bar{X} = \Bar{x} | T(\Bar{X}) = t)P_{\theta}(T(\Bar{X}) = t) \\
+            &= P_{\theta}(T(\Bar{X}) = t | \Bar{X} = \Bar{x})P_{\theta}(\Bar{X} = \Bar{x})
+        \end{aligned}
+    \end{equation*}
+    
+    ``All the information is in $T(.)$''
+    
+    \item Therefore $P_{\Bar{X} = \Bar{x}}(X=x|T(X) = t)$ cannot be a function of $\theta$ in order for it not to contain any information or vary with $\theta$ and for sufficient statistic
+    
+    \item $\Bar{b} = (b_1, b_2...b_n)$: outcome of a poll
+    
+    \item $L(\theta; \Bar{b}) = \theta^(b_1)(1-\theta)^{1-b_1}$: likelihood of a certain $\theta$
+    
+    \item $\Bar{b}$ fixed, varying $\theta$, see how it varies:
+    
+    \begin{equation*}
+        \begin{aligned}
+            \prod_{i = 1}^{n}\theta^{b_i}(1 - \theta)^{1 - b_i} &= \theta^{\sum_{i = 1}^{n} b_i}(1 - \theta)^{n - \sum_{i = 1}^{n} b_i} \\ 
+            &= \theta^{T(\Bar{b})}(1-\theta)^{n - T(\Bar{b})}
+        \end{aligned}
+    \end{equation*}
+    
+    \item $P_{\theta}(\Bar{B} = \Bar{b} | T(\Bar{B}) = t) P_{\theta}(T(\Bar{B}) = t)$:
+    
+    \begin{gather*}
+        \begin{cases}
+            P_{\theta}(\Bar{B} = \Bar{b} | T(\Bar{B}) = t) \rightarrow \text{the residual} \frac{1}{{n \choose t}} \\
+            P_{\theta}(T(\Bar{B}) = t) \rightarrow \theta^{T(\Bar{b})}(1-\theta)^{n - T(\Bar{b})}
+        \end{cases}
+    \end{gather*}
+    
+    \item The residual: $\mathbb{I}_{\{t = ||\Bar{b}||_0\}}$
+    
+    \begin{equation*}
+        \frac{P_{\theta}(\Bar{B} = \Bar{b} \cap T(\Bar{B}) = t)}{P_{\theta}(T(\Bar{B}) = t)} = \frac{\theta^{t}(1 - \theta)^{n - t}}{{n \choose t} \theta^{t}(1 - \theta)^{n - t}} = \frac{1}{{n \choose t}}
+    \end{equation*}
+    
+    This means if they match, what is the probability of a certain pattern
+    
+\end{itemize}
+
+\subsection{Sufficient Statistic:}
+
+\begin{itemize}
+    
+    \item A statistic $T(\Bar{x})$ is sufficient for $\theta$ if the conditional distribution of $X$ given $T(X)$ does not depend on $\theta$
+    
+    \begin{equation*}
+        \begin{aligned}
+            P_{\theta}(\Bar{X} = \Bar{x} | T(\Bar{X}) = T(\Bar{x})) &= \frac{P_{\theta}(\Bar{X} = \Bar{x}, T(\Bar{X}) = T(\Bar{x}))}{P_{\theta}(T(\Bar{X}) = T(\Bar{x}))} \\
+            &= \frac{P_{\theta}(\Bar{X} = \Bar{x})}{P_{\theta}(T(X) = T(x))}
+        \end{aligned}
+    \end{equation*}
+    
+    If all the information is in $T(X)$, then the ratio should not depend on $\theta$
+    
+\end{itemize}
+
+\subsection{Factorization Theorem:}
+
+\begin{itemize}
+    
+    \item $f(x|\theta)$: distribution of $X$ under $\theta$
+    
+    \item $T(X)$ is a sufficient statistic for $\theta$ if and only if there exists $g(t|\theta)$ and $h(x)$ such that all $X$'s and all $\theta$s:
+    
+    \begin{equation*}
+        f(x|\theta) = g(T(x)|\theta)h(x)
+    \end{equation*}
+    
+    i.e. a parameterized distribution
+    
+    \item Proof:
+    
+    Suppose $T(X)$ is a sufficient statistic:
+    
+    \begin{equation*}
+        \begin{aligned}
+            f(x|\theta) &= P_{\theta}(X = x) \text{, if true} \\
+            &= P_{\theta}(X = x, T(X) = T(\Bar{x}))
+        \end{aligned}
+    \end{equation*}
+    
+    Introduce the conditional version:
+    
+    \begin{gather*}
+        \begin{cases}
+            P_{\theta}(X = x | T(X) = T(\Bar{x})) \rightarrow h(\Bar{x}) \text{, function of the residual, independent of }\theta \\
+            P_{\theta}(T(X) = T(\Bar{x})) \rightarrow g(T(x)|\theta)
+        \end{cases}
+    \end{gather*}
+    
+    How about the reverse side? Since we are trying to prove an if-and-only-if hypothesis:
+    
+    Assume the factorization exists:
+    
+    \begin{equation*}
+        f(x|\theta) = g(T(x)|\theta)h(x)
+    \end{equation*}
+    
+    Aiming for a particular mapping:
+    
+    \begin{equation*}
+        \frac{f(x|y)}{P_{\theta}(T(X) = T(x))}
+    \end{equation*}
+    
+    Want the ratio to be constant independent of $\theta$:
+    
+    \begin{equation*}
+        \begin{aligned}
+            \frac{g(T(x)|\theta)h(\Bar{x})}{P_{\theta}(T(X) = T(x))} \\
+            P_{\theta}(T(X) = T(x)) &= P_{\theta}(T(X) = t) \\
+            &= P_{\theta}(x = T^{-1}(t)) \text{, the pre-image} \\
+            &= \sum_{x \in T^{-1}(t)} f(x|\theta) \\
+            &= \sum_{x \in T^{-1}(t)} g(T(x)|\theta) h(x) \\
+            \frac{g(T(x)|\theta)h(\Bar{x})}{P_{\theta}(T(X) = T(x))} &= \frac{g(T(x)|\theta)h(\Bar{x})}{\sum_{x \in T^{-1}(t)} g(T(x)|\theta) h(x)} \\
+            &= \frac{h(\Bar{x})}{\sum_{x \in T^{-1}(t)} h(x)} \rightarrow \text{independent of } \theta
+        \end{aligned}
+    \end{equation*}
+    
+\end{itemize}
+
 \end{document}
